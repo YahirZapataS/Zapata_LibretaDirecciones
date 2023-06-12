@@ -13,7 +13,7 @@ public class AddressEntry {
     private String Telefono;
 
     public AddressEntry(String Nombre, String Apellido, String Calle, String Ciudad, String Estado,
-                        String codigoPostal, String email, String Telefono) {
+            String codigoPostal, String email, String Telefono) {
         this.Nombre = Nombre;
         this.Apellido = Apellido;
         this.Calle = Calle;
@@ -35,6 +35,6 @@ public class AddressEntry {
     }
 
     public String getApellido() {
-        return null;
+        return Apellido;
     }
 }
