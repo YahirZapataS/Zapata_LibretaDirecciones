@@ -62,23 +62,23 @@ public class AddressBookApplication {
     private void addEntry() {
         System.out.println("Ingrese los detos del contacto:");
         System.out.print("Nombre: ");
-        String firstName = scanner.nextLine();
+        String Nombre = scanner.nextLine();
         System.out.print("Apellido: ");
         String Apellido = scanner.nextLine();
         System.out.print("Calle: ");
-        String street = scanner.nextLine();
+        String Calle = scanner.nextLine();
         System.out.print("Ciudad: ");
-        String city = scanner.nextLine();
+        String Ciudad = scanner.nextLine();
         System.out.print("Estado: ");
-        String state = scanner.nextLine();
+        String Estado = scanner.nextLine();
         System.out.print("Código postal: ");
-        String postalCode = scanner.nextLine();
+        String codigoPostal = scanner.nextLine();
         System.out.print("Correo electrónico: ");
         String email = scanner.nextLine();
         System.out.print("Teléfono: ");
-        String phoneNumber = scanner.nextLine();
+        String Telefono = scanner.nextLine();
 
-        AddressEntry entry = new AddressEntry(firstName, Apellido, street, city, state, postalCode, email, phoneNumber);
+        AddressEntry entry = new AddressEntry(Nombre, Apellido, Calle, Ciudad,  Estado, codigoPostal, email, Telefono);
         addressBook.addEntry(entry);
         System.out.println("Entrada agregada correctamente.");
     }
