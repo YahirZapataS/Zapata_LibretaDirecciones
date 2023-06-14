@@ -1,7 +1,5 @@
 package address_data;
 
-import address_data.AddressEntry;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,61 +7,58 @@ public class AddressBookApplication {
     private AddressBook addressBook;
     private Scanner scanner;
 
+    // Instancia de la clase AddressBook
+    // Utiliza un archivo txt en una ruta especifica para el almacenamiento de los
+    // datos
     public AddressBookApplication() {
-        addressBook = new AddressBook();
+        String filePath = "D:/yahir/Documentos/Proyecto_Directorio/Directorio.txt"; // Ruta del archivo TXT
+        addressBook = new AddressBook(filePath);
         scanner = new Scanner(System.in);
     }
 
+    // Crea una nueva instancia de Menú para mostrar las opciones disponibles al
+    // usuario.
+    // El bucle continuará hasta que el usuario elija salir del programa.
     public void run() {
-        boolean running = true;
-        while (running) {
-            displayMenu();
-            String choice = getUserChoice();
-            switch (choice) {
+        Menu menu = new Menu();
+        boolean exit = false;
+
+        while (!exit) {
+            menu.mostrarMenu();
+            String opcion = menu.getUserOpcion();
+
+            switch (opcion) {
                 case "1":
-                    addEntry();
+                    agregarContacto();
                     break;
                 case "2":
-                    removeEntry();
+                    eliminarContacto();
                     break;
                 case "3":
-                    searchEntries();
+                    buscarContacto();
                     break;
                 case "4":
-                    displayEntries();
+                    mostrarContactos();
                     break;
                 case "5":
-                    running = false;
+                    exit = true;
+                    System.out.println("-------------------------------------------------------------");
+                    System.out.println("¡Directorio Cerrado con éxito! Que tengas buen día...");
+                    System.out.println("-------------------------------------------------------------");
                     break;
                 default:
-                    System.out.println("Opción inválida. Por favor, selecciona una opción válida.");
+                    System.out.println("Opcion no disponible. Inténtalo de nuevo.");
                     break;
             }
         }
     }
 
-    private void displayMenu() {
-        System.out.println("***************");
-        System.out.println("Mi Directorio");
-        System.out.println("***************");
-        System.out.println("1. Agregar contacto");
-        System.out.println("2. Eliminar contacto");
-        System.out.println("3. Buscar contacto");
-        System.out.println("4. Mostrar contacto");
-        System.out.println("5. Salir");
-        System.out.println("***************");
-    }
-
-    private String getUserChoice() {
-        System.out.print("Selecciona una opción: ");
-        return scanner.nextLine();
-    }
-
-    private void addEntry() {
-        System.out.println("Ingrese los detos del contacto:");
-        System.out.print("Nombre: ");
+    // Método que solicita al usuario los datos del contacto a agregar
+    private void agregarContacto() {
+        System.out.println("Complete los datos del contacto en los siguientes campos:");
+        System.out.print("Nombre(s): ");
         String Nombre = scanner.nextLine();
-        System.out.print("Apellido: ");
+        System.out.print("Apellido(s): ");
         String Apellido = scanner.nextLine();
         System.out.print("Calle: ");
         String Calle = scanner.nextLine();
@@ -78,38 +73,39 @@ public class AddressBookApplication {
         System.out.print("Teléfono: ");
         String Telefono = scanner.nextLine();
 
-        AddressEntry entry = new AddressEntry(Nombre, Apellido, Calle, Ciudad,  Estado, codigoPostal, email, Telefono);
-        addressBook.addEntry(entry);
-        System.out.println("Entrada agregada correctamente.");
+        AddressEntry entry = new AddressEntry(Nombre, Apellido, Calle, Ciudad, Estado,
+                codigoPostal, email, Telefono);
+        addressBook.agregarContacto(entry);
     }
 
-    private void removeEntry() {
-        System.out.println("Ingrese el apellido de la entrada a eliminar:");
+    // Método que elimina un contacto de la lista Directorio solicitando el apellido
+    private void eliminarContacto() {
+        System.out.println("Ingrese el apellido del contacto a eliminar: ");
         String Apellido = scanner.nextLine();
-        List<AddressEntry> searchResults = addressBook.searchEntriesByApellido(Apellido);
+        List<AddressEntry> searchResults = addressBook.buscarApellido(Apellido);
         if (!searchResults.isEmpty()) {
             System.out.println("Se encontraron las siguientes entradas:");
             for (int i = 0; i < searchResults.size(); i++) {
                 System.out.println((i + 1) + ". " + searchResults.get(i));
             }
-            System.out.print("Selecciona el número de la entrada a eliminar: ");
-            int choice = Integer.parseInt(scanner.nextLine());
-            if (choice >= 1 && choice <= searchResults.size()) {
-                AddressEntry entryToRemove = searchResults.get(choice - 1);
-                addressBook.removeEntry(entryToRemove);
-                System.out.println("Entrada eliminada correctamente.");
+            System.out.print("Selecciona el contacto a eliminar: ");
+            int opcion = Integer.parseInt(scanner.nextLine());
+            if (opcion >= 1 && opcion <= searchResults.size()) {
+                AddressEntry entryToRemove = searchResults.get(opcion - 1);
+                addressBook.eliminarContacto(entryToRemove);
             } else {
                 System.out.println("Opción inválida.");
             }
         } else {
-            System.out.println("No se encontraron entradas con ese apellido.");
+            System.out.println("No se encontraron contactos con ese a");
         }
     }
 
-    private void searchEntries() {
+    // Método que permite buscar a un contacto solicitando el apellido
+    private void buscarContacto() {
         System.out.println("Ingrese el inicio del apellido para buscar:");
         String Apellido = scanner.nextLine();
-        List<AddressEntry> searchResults = addressBook.searchEntriesByApellido(Apellido);
+        List<AddressEntry> searchResults = addressBook.buscarApellido(Apellido);
         if (!searchResults.isEmpty()) {
             System.out.println("Se encontraron las siguientes entradas:");
             for (AddressEntry entry : searchResults) {
@@ -121,8 +117,8 @@ public class AddressBookApplication {
         }
     }
 
-    private void displayEntries() {
-        addressBook.sortEntriesByApellido();
+    // Método que muestra todos los contactos dentro del archivo Directorio
+    private void mostrarContactos() {
         List<AddressEntry> entries = addressBook.getAllEntries();
         if (!entries.isEmpty()) {
             System.out.println("Lista de entradas:");
@@ -131,10 +127,11 @@ public class AddressBookApplication {
                 System.out.println("---------------");
             }
         } else {
-            System.out.println("No hay entradas en la libreta de direcciones.");
+            System.out.println("La libreta de direcciones está vacía.");
         }
     }
 
+    // Método que llama al método "Run" para iniciar el programa
     public static void main(String[] args) {
         AddressBookApplication application = new AddressBookApplication();
         application.run();
